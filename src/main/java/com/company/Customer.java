@@ -1,4 +1,4 @@
-package main.java.com.company;
+package com.company;
 
 public class Customer {
     private final String name;
@@ -22,10 +22,9 @@ public class Customer {
             account = new Account(accountId);
             return true;
         }
-        else{
-            System.out.println("Customer " + fullName() + " already has the active account");
-            return false;
-        }
+        System.out.println("Customer " + fullName() + " already has the active account");
+        return false;
+
     }
 
     /**
@@ -38,10 +37,8 @@ public class Customer {
             System.out.println("Customer " + fullName() + " has no active account to close");
             return false;
         }
-        else{
-            account = null;
-            return true;
-        }
+        account = null;
+        return true;
     }
 
     /**

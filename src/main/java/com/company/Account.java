@@ -1,4 +1,4 @@
-package main.java.com.company;
+package com.company;
 
 public class Account {
     private final long id;
@@ -21,7 +21,6 @@ public class Account {
             balance -= amount;
             return true;
         }
-
         return false;
     }
 
@@ -34,10 +33,8 @@ public class Account {
     public boolean add(double amount) {
         if (amount > 0){
             balance += amount;
-
             return true;
         }
-
         return false;
     }
 }
