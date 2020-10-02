@@ -23,7 +23,7 @@ public class Account {
      * otherwise returns false
      */
     public boolean withdraw(double amount, Account beneficiary) {
-        if (amount <= 0 && balanceOn(null) - amount < 0) {
+        if (amount <= 0 || balanceOn(null) - amount < 0) {
             return false;
         }
         Transaction withdrawTransaction = transactionManager.createTransaction(amount, this, beneficiary);
@@ -51,9 +51,9 @@ public class Account {
      * if amount &gt 0,
      * otherwise returns false
      */
-    public boolean add(double amount) {
-        if (amount < 0) return false;
-        Transaction addCashTransaction = transactionManager.createTransaction(amount, null, null);
+    public boolean addCash(double amount) {
+        if (amount <= 0) return false;
+        Transaction addCashTransaction = transactionManager.createTransaction(amount, null, this);
         transactionManager.executeTransaction(addCashTransaction);
         return true;
     }
@@ -61,11 +61,9 @@ public class Account {
     /**
      * Adds entry to account.
      */
-    void addEntry(Entry entryToAccount) {
+    public void addEntry(Entry entryToAccount) {
         entries.addEntry(entryToAccount);
     }
-
-
 
 
     public Collection<Entry> history(LocalDate from, LocalDate to) {
@@ -74,12 +72,13 @@ public class Account {
 
     /**
      * Calculates balance on the accounting entries basis
+     *
      * @param date
      * @return balance
      */
     public double balanceOn(LocalDate date) {
         double balance = 0;
-        for (Entry entry: entries.betweenDates(null, date)) {
+        for (Entry entry : entries.betweenDates(null, date)) {
             balance += entry.getAmount();
         }
         return balance;

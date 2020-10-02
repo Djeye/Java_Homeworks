@@ -1,22 +1,18 @@
 package ru.sbt;
 
-import jdk.incubator.jpackage.internal.Log;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Manages all transactions within the application
  */
 public class TransactionManager {
 
-    private final SortedMap<Account, ArrayList<Transaction>> transactionMap = new TreeMap<>();
+    private final HashMap<Account, ArrayList<Transaction>> transactionMap = new HashMap<>();
     private int newTransactionId;
 
     /**
      * Creates and stores transactions
+     *
      * @param amount
      * @param originator
      * @param beneficiary
@@ -47,14 +43,14 @@ public class TransactionManager {
         if (transaction == null) return;
         try {
             transaction.rollback();
-        }catch (IllegalStateException e){
-            Log.info(" > Cannot rollback transaction " + transaction.getId() + " error:" + e);
+        } catch (IllegalStateException e) {
+            System.out.println(" > Cannot rollback transaction " + transaction.getId() + " error:" + e);
             return;
         }
-        if (transaction.getBeneficiary() != null){
+        if (transaction.getBeneficiary() != null) {
             transactionMap.get(transaction.getBeneficiary()).remove(transaction);
         }
-        if (transaction.getOriginator() != null){
+        if (transaction.getOriginator() != null) {
             transactionMap.get(transaction.getOriginator()).remove(transaction);
         }
     }
@@ -63,14 +59,14 @@ public class TransactionManager {
         if (transaction == null) return;
         try {
             transaction.execute();
-        }catch (IllegalStateException e){
-            Log.info(" > Cannot execute transaction" + transaction.getId() + " error:" + e);
+        } catch (IllegalStateException e) {
+            System.out.println(" > Cannot execute transaction" + transaction.getId() + " error:" + e);
             return;
         }
-        if (transaction.getBeneficiary() != null){
+        if (transaction.getBeneficiary() != null) {
             transactionMap.get(transaction.getBeneficiary()).add(transaction);
         }
-        if (transaction.getOriginator() != null){
+        if (transaction.getOriginator() != null) {
             transactionMap.get(transaction.getOriginator()).add(transaction);
         }
     }

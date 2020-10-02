@@ -1,7 +1,5 @@
 package ru.sbt;
 
-import jdk.incubator.jpackage.internal.Log;
-
 import java.time.LocalDateTime;
 
 public class Transaction {
@@ -22,37 +20,38 @@ public class Transaction {
 
     /**
      * Adding entries to both accounts
+     *
      * @throws IllegalStateException when was already executed
      */
-    public Transaction execute() throws IllegalStateException{
+    public Transaction execute() throws IllegalStateException {
         if (executed) throw new IllegalStateException();
-        if (originator != null && beneficiary != null){
-            originator.addEntry(new Entry(originator,this, -amount, LocalDateTime.now()));
-            beneficiary.addEntry(new Entry(beneficiary,this, amount, LocalDateTime.now()));
-            executed = true;
-        }else {
-            Log.info(" > Account doesn't exists");
-            executed = false;
+        if (originator != null) {
+            originator.addEntry(new Entry(originator, this, -amount, LocalDateTime.now()));
         }
+        if (beneficiary != null) {
+            beneficiary.addEntry(new Entry(beneficiary, this, amount, LocalDateTime.now()));
+        }
+        executed = true;
         return this;
     }
 
     /**
      * Removes all entries of current transaction from originator and beneficiary
+     *
      * @throws IllegalStateException when was already rolled back
      */
     public Transaction rollback() throws IllegalStateException {
         if (!executed || rolledBack) throw new IllegalStateException();
-        if (originator != null && beneficiary != null){
-            originator.addEntry(new Entry(originator,this, amount, LocalDateTime.now()));
-            beneficiary.addEntry(new Entry(beneficiary,this, -amount, LocalDateTime.now()));
-            rolledBack = true;
-        }else {
-            Log.info(" > Account doesn't exists");
-            rolledBack = false;
+        if (originator != null) {
+            originator.addEntry(new Entry(originator, this, amount, LocalDateTime.now()));
         }
+        if (beneficiary != null) {
+            beneficiary.addEntry(new Entry(beneficiary, this, -amount, LocalDateTime.now()));
+        }
+        rolledBack = true;
         return this;
     }
+
 
     public long getId() {
         return id;

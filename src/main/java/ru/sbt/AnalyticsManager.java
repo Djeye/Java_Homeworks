@@ -1,7 +1,5 @@
 package ru.sbt;
 
-import jdk.incubator.jpackage.internal.Log;
-
 import java.util.*;
 
 public class AnalyticsManager {
@@ -24,7 +22,7 @@ public class AnalyticsManager {
             }
 
             Integer countPurchases = accountsMap.get(beneficiary);
-            countPurchases ++;
+            countPurchases++;
             accountsMap.put(beneficiary, countPurchases);
 
             if (countPurchases > mostNumerousPurchases) {
@@ -41,16 +39,17 @@ public class AnalyticsManager {
         if (account == null) return topTenTransactions;
         ArrayList<Transaction> transactions = new ArrayList<>(transactionManager.findAllTransactionsByAccount(account));
         transactions.sort(Comparator.comparing(Transaction::getAmount));
+
         int maxPurchases;
         if (transactions.size() < 10) {
-            Log.info("There is less then ten purchases");
+            System.out.println("There is less then ten purchases");
             maxPurchases = transactions.size();
         } else maxPurchases = 10;
 
         for (int i = transactions.size() - 1; i > transactions.size() - maxPurchases; i--) {
+            if (transactions.get(i).getOriginator() != account) continue;
             topTenTransactions.add(transactions.get(i));
         }
-
         return topTenTransactions;
     }
 }

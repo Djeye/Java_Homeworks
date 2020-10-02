@@ -1,8 +1,5 @@
 package ru.sbt;
 
-
-import jdk.incubator.jpackage.internal.Log;
-
 import java.time.LocalDate;
 import java.util.*;
 
@@ -19,24 +16,38 @@ public class Entries {
             entriesMap.put(entryTime, new ArrayList<>());
         }
         // add entry by key
-        Log.info(" > Successful add Entry");
         entriesMap.get(entryTime).add(entry);
     }
 
     Collection<Entry> from(LocalDate date) {
         if (date == null && !entriesMap.containsKey(date)) {
-            Log.info("There is no your Entry");
+            System.out.println("There is no your Entry");
             return new ArrayList<>();
         }
         return new ArrayList<>(entriesMap.get(date));
     }
+
     Collection<Entry> betweenDates(LocalDate from, LocalDate to) {
         ArrayList<Entry> betweenDatesEntries = new ArrayList<>();
-        for (Map.Entry<LocalDate, ArrayList<Entry>> entry:entriesMap.entrySet()) {
-            if (entry.getKey().isAfter(from) && entry.getKey().isBefore(to)){
-                betweenDatesEntries.addAll(entry.getValue());
-            }
+        SortedMap<LocalDate, ArrayList<Entry>> partOfMap;
+
+        if (from == null && to == null) {
+            partOfMap = entriesMap;
         }
+        else if (from == null) {
+            partOfMap = entriesMap.headMap(to);
+        }
+        else if (to == null) {
+            partOfMap = entriesMap.tailMap(from);
+        }
+        else {
+            partOfMap = entriesMap.subMap(from, to);
+        }
+
+        for(Map.Entry<LocalDate, ArrayList<Entry>> entry: partOfMap.entrySet()) {
+            betweenDatesEntries.addAll(entry.getValue());
+        }
+
         return betweenDatesEntries;
     }
 
@@ -45,6 +56,6 @@ public class Entries {
         //array of entries in last datetime
         ArrayList<Entry> lastEntries = entriesMap.get(entriesMap.lastKey());
         //return last in that list
-        return lastEntries.get(lastEntries.size()-1);
+        return lastEntries.get(lastEntries.size() - 1);
     }
 }
