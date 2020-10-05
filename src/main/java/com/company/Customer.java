@@ -59,7 +59,7 @@ public class Customer {
             System.out.println("Customer " + fullName() + " has no active account");
             return false;
         }
-        else return account.withdraw(amount);
+        return account.withdraw(amount);
     }
 
     /**
@@ -72,7 +72,6 @@ public class Customer {
             System.out.println("Customer " + fullName() + " has no active account");
             return false;
         }
-        else return account.add(amount);
+        return account.add(amount);
     }
-
 }

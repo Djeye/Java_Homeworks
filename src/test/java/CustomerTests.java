@@ -5,14 +5,14 @@ import org.junit.Test;
 
 
 public class CustomerTests {
-    Customer cust = new Customer("Johny", "Dee");
+    Customer customer = new Customer("Johny", "Dee");
 
     @Test
     public void openAccauntAndCloseAccountPassedTest(){
         // given
-        cust.openAccount(12345678);
+        customer.openAccount(12345678);
         // when
-        boolean isPassed = cust.closeAccount();
+        boolean isPassed = customer.closeAccount();
         // then
         assertTrue(isPassed);
     }
@@ -20,10 +20,10 @@ public class CustomerTests {
     @Test
     public void openAccauntAndCloseItTwiceTest(){
         // given
-        cust.openAccount(12345678);
+        customer.openAccount(12345678);
+        customer.closeAccount();
         // when
-        cust.closeAccount();
-        boolean isPassed = cust.closeAccount();
+        boolean isPassed = customer.closeAccount();
         // then
         assertFalse(isPassed);
     }
@@ -31,9 +31,9 @@ public class CustomerTests {
     @Test
     public void checkCorrectFullNameTest(){
         // given
-        cust.openAccount(12345678);
+        customer.openAccount(12345678);
         // when
-        boolean isPassed = cust.fullName().equals("Johny Dee");
+        boolean isPassed = customer.fullName().equals("Johny Dee");
         // then
         assertTrue(isPassed);
     }
@@ -41,22 +41,21 @@ public class CustomerTests {
     @Test
     public void addMoneyToAccountTest(){
         // given
-        cust.openAccount(12345678);
+        customer.openAccount(12345678);
         // when
-        boolean isPassed = cust.addMoneyToCurrentAccount(500);
+        boolean isPassed = customer.addMoneyToCurrentAccount(500);
         // then
         assertTrue(isPassed);
     }
 
     @Test
-    public void addMoneyToAccount_thenWithdrawItTest(){
+    public void withdrawFromAccountTest(){
         // given
-        cust.openAccount(12345678);
+        customer.openAccount(12345678);
+        customer.addMoneyToCurrentAccount(5000);
         // when
-        cust.addMoneyToCurrentAccount(5000);
-        boolean isPassed = cust.withdrawFromCurrentAccount(2500);
+        boolean isPassed = customer.withdrawFromCurrentAccount(2500);
         // then
         assertTrue(isPassed);
     }
-
 }

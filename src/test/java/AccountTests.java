@@ -12,7 +12,6 @@ public class AccountTests {
         boolean isPassed = account.add(1500);
         // then
         assertTrue(isPassed);
-
     }
 
     @Test
@@ -40,8 +39,8 @@ public class AccountTests {
     public void withdrawPositive_moreThanAdd_PassedTest(){
         // given
         Account account = new Account(4635235);
-        // when
         account.add(1000);
+        // when
         boolean isPassed = account.withdraw(5000);
         // then
         assertFalse(isPassed);
