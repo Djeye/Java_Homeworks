@@ -19,7 +19,6 @@ public class Entry {
         this.time = time;
     }
 
-
     public Account getAccount() {
         return account;
     }

@@ -9,7 +9,7 @@ public class AnalyticsManager {
         this.transactionManager = transactionManager;
     }
 
-    public Account mostFrequentBeneficiaryOfAccount(Account account) {
+    public Account mostFrequentBeneficiaryOfAccount(DebitCard account) {
         if (account == null) return null;
         Account mostFrequentAccount = null;
         int mostNumerousPurchases = 0;
@@ -34,7 +34,7 @@ public class AnalyticsManager {
         return mostFrequentAccount;
     }
 
-    public Collection<Transaction> topTenExpensivePurchases(Account account) {
+    public Collection<Transaction> topTenExpensivePurchases(DebitCard account) {
         List<Transaction> topTenTransactions = new ArrayList<>();
         if (account == null) return topTenTransactions;
         ArrayList<Transaction> transactions = new ArrayList<>(transactionManager.findAllTransactionsByAccount(account));
@@ -51,5 +51,41 @@ public class AnalyticsManager {
             topTenTransactions.add(transactions.get(i));
         }
         return topTenTransactions;
+    }
+
+
+    public double overallBalanceOfAccounts(List<Account> accounts) {
+        if (accounts == null) return 0;
+        double overall = 0d;
+        for (Account acc : accounts) {
+            overall += acc.balanceOn(null);
+        }
+        return overall;
+    }
+
+    public <R ,T extends Account> Set<R> uniqueKeysOf(List<T> accounts, KeyExtractor<R, Account> extractor) {
+        Set<R> keys = new HashSet<>();
+        if (accounts == null || extractor == null) return keys;
+
+        for (T entity: accounts) {
+            keys.add(extractor.extract(entity));
+        }
+        return keys;
+    }
+
+    public <R extends Account> List<R> accountsRangeFrom(List<R> accounts, R minAccount, Comparator<R> comparator) {
+        if (accounts == null || comparator == null) return new ArrayList<>();
+
+        List<R> accountsFromList = new ArrayList<>(accounts);
+        accountsFromList.sort(comparator);
+        int minIndex;
+
+        if (minAccount == null){
+            minIndex = 0;
+        }else {
+            minIndex = accountsFromList.indexOf(minAccount);
+        }
+
+        return accountsFromList.subList(minIndex, accountsFromList.size() - 1);
     }
 }

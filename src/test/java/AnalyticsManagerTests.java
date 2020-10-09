@@ -1,30 +1,32 @@
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.sbt.Account;
-import ru.sbt.AnalyticsManager;
-import ru.sbt.Transaction;
-import ru.sbt.TransactionManager;
+import ru.sbt.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AnalyticsManagerTests {
-    private Account joeSmith;
-    private Account adamEdler;
+    private final int START_CASH_ONE = 1000;
+    private final int START_CASH_TWO = 3000;
+
+
+    private DebitCard joeSmith;
+    private DebitCard adamEdler;
     private final TransactionManager transactionManager = new TransactionManager();
     private final AnalyticsManager analyticsManager = new AnalyticsManager(transactionManager);
 
     @BeforeEach
     void preparationSet() {
-        joeSmith = new Account(1, transactionManager);
-        adamEdler = new Account(2, transactionManager);
-        joeSmith.addCash(1000);
-        adamEdler.addCash(300);
-        joeSmith.withdraw(200, adamEdler);
+        joeSmith = new DebitCard(1, transactionManager, null);
+        adamEdler = new DebitCard(2, transactionManager, null);
+        joeSmith.addCash(START_CASH_ONE);
+        adamEdler.addCash(START_CASH_TWO);
         joeSmith.withdraw(500, adamEdler);
+        joeSmith.withdraw(200, adamEdler);
         adamEdler.withdraw(100, joeSmith);
     }
 
@@ -58,5 +60,29 @@ class AnalyticsManagerTests {
         assertEquals(2, topTransactions.size());
         assertEquals(500, trans1);
         assertEquals(200, trans2);
+    }
+
+    @Test
+    void calcOverallAllAccountsTest(){
+        List<Account> accountList = new ArrayList<>();
+        accountList.add(joeSmith);
+        accountList.add(adamEdler);
+
+        double actualBalance = analyticsManager.overallBalanceOfAccounts(accountList);
+
+        assertEquals(START_CASH_ONE + START_CASH_TWO, actualBalance);
+    }
+
+    @Test
+    void findAllUniqueKeysTest(){
+        List<Account> accountList = new ArrayList<>();
+        accountList.add(joeSmith);
+        accountList.add(adamEdler);
+
+        Set<Integer> keys = analyticsManager.uniqueKeysOf(accountList, new AccountKeyExtractor());
+
+        boolean isSuccess = (keys.size() == 2);
+
+        assertTrue(isSuccess);
     }
 }

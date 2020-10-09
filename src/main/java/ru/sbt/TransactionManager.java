@@ -31,7 +31,7 @@ public class TransactionManager {
         return new Transaction(newTransactionId, amount, originator, beneficiary);
     }
 
-    public Collection<Transaction> findAllTransactionsByAccount(Account account) {
+    public Collection<Transaction> findAllTransactionsByAccount(DebitCard account) {
         if (account == null || !transactionMap.containsKey(account)) {
             return new ArrayList<>();
         }

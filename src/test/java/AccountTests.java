@@ -1,5 +1,5 @@
 import org.junit.jupiter.api.Test;
-import ru.sbt.Account;
+import ru.sbt.DebitCard;
 import ru.sbt.Entry;
 import ru.sbt.Transaction;
 import ru.sbt.TransactionManager;
@@ -12,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AccountTests {
     TransactionManager tranMan = new TransactionManager();
-    Account joeSmith = new Account(1, tranMan);
+    DebitCard joeSmith = new DebitCard(1, tranMan, null);
+    DebitCard bob = new DebitCard(2, tranMan, null);
 
     @Test
     void accountTestAddCash(){
@@ -28,6 +29,7 @@ class AccountTests {
     @Test
     void accountBalanceTest() {
         boolean isPassed = joeSmith.addCash(500);
+
         double value = joeSmith.balanceOn(null);
 
         assertTrue(isPassed);
