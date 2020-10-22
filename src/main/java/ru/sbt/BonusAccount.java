@@ -2,6 +2,7 @@ package ru.sbt;
 
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 public class BonusAccount implements Account{
     private final Entries entries;
@@ -24,6 +25,11 @@ public class BonusAccount implements Account{
     @Override
     public void addEntry(Entry entryToAccount) {
         entries.addEntry(entryToAccount);
+    }
+
+    @Override
+    public Collection<Entry> getAllEntries(LocalDate from, LocalDate to) {
+        return entries.betweenDates(from, to);
     }
 
     public double getCashback() {

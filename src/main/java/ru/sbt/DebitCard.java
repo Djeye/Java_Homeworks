@@ -73,6 +73,10 @@ public class DebitCard implements Account{
         entries.addEntry(entryToAccount);
     }
 
+    @Override
+    public Collection<Entry> getAllEntries(LocalDate from, LocalDate to) {
+        return entries.betweenDates(from, to);
+    }
 
     public Collection<Entry> history(LocalDate from, LocalDate to) {
         return entries.betweenDates(from, to);

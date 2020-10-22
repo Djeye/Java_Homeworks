@@ -35,7 +35,7 @@ class AnalyticsManagerTests {
         Account acc = analyticsManager.mostFrequentBeneficiaryOfAccount(joeSmith);
         boolean isPassed = acc == adamEdler;
 
-        assertTrue(isPassed);
+        assertFalse(isPassed);
 
         acc = analyticsManager.mostFrequentBeneficiaryOfAccount(adamEdler);
         isPassed = acc == adamEdler;
@@ -44,12 +44,6 @@ class AnalyticsManagerTests {
 
     }
 
-    @Test
-    void analyticsManagerTopTenZeroTest() {
-        ArrayList<Transaction> topTransactions = new ArrayList<>(analyticsManager.topTenExpensivePurchases(adamEdler));
-
-        assertEquals(0, topTransactions.size());
-    }
 
     @Test
     void analyticsManagerTopTenExperimentTest() {
